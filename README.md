@@ -28,7 +28,7 @@ Or install it yourself as:
 ## Usage
 
 Please refer to
-[github.com/elgoog/ruby_brain/README.org](https://github.com/elgoog/ruby_brain/README.org)
+[github.com/elgoog/ruby_brain/README.org](https://github.com/elgoog/ruby_brain/blob/master/README.org)
 for detail.
 
 ## Development

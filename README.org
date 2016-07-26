@@ -226,7 +226,7 @@
 
    I tried to train wioth above conditions.
    The accuracy of trained model was 92.3%.
-   The weights file is [[https://github.com/elgoog/weights_ruby_brain/weights_782_50_10_1.yml][here]].
+   The weights file is [[https://github.com/elgoog/weights_ruby_brain/blob/master/weights_782_50_10_1.yml][here]].
    
 * Contributing
 
