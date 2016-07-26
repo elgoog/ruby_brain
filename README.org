@@ -139,7 +139,7 @@
 * Examples
 
 ** MNIST
-   Following code is included in [[https://github.com/%5Bmy-github-username%5D/ruby_brain/examples/mnist.rb][examples/mnist.rb]]
+   Following code is included in [[https://github.com/elgoog/ruby_brain/blob/master/examples/mnist.rb][examples/mnist.rb]]
 
    This module dependos on [[https://rubygems.org/gems/mnist][mnist]] gem to load mnist data into ruby array.
 
