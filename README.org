@@ -1,0 +1,237 @@
+* Introduction
+
+  RubyBrain is a library of neural net, deep learning for Ruby.
+  You can install/use this library easily because the core is created by using only Ruby standard library.
+
+  The code of RubyBrain is the neuron oriented style.
+  This means that a class which represents a neuraon exists and each neurons are instances of the class.
+  So, you can treat neurons flexibly in a network.
+  Instead, the speed is very slow and it might not be reasonable for applications to use this library in the core.
+  However this library may help you get more deep knowledge around neuralnet/deep learning.
+  
+* Installation
+
+  Add this line to your application's Gemfile:
+
+  #+BEGIN_SRC ruby
+    gem 'ruby_brain'
+  #+END_SRC
+
+  And then execute:
+
+  #+BEGIN_SRC shell
+    $ bundle
+  #+END_SRC
+
+  Or install it yourself as:
+
+  #+BEGIN_SRC shell
+    $ gem install ruby_brain
+  #+END_SRC
+  
+* Usage
+  
+** dataset
+
+   All dataset used for training/test/predicate must be 2 dimension array structure.
+   1st dimension indicates samples and 2nd dimension is used for features.
+
+*** example "AND"
+    Now we assume that we train a network to operate as "AND operator"
+    The true table of "AND operator" is as below.
+    In short, when both "in 1" and "in 2" are 1, the "out" should be 1
+    and 0 should be output for other input combinations.
+    
+    | in 1 | in 2 | out |
+    |------+------+-----|
+    | 0    | 0    | 0   |
+    | 0    | 1    | 0   |
+    | 1    | 0    | 0   |
+    | 1    | 1    | 1   |
+
+    In this situation, you can prepare the dataset lake following Ruby array.
+    #+BEGIN_SRC ruby
+      training_input_set = [
+        [0, 0],
+        [0, 1],
+        [1, 0],
+        [1, 1],
+      ]
+
+      training_supervisor_set = [
+        [0],
+        [0],
+        [0],
+        [1],
+      ]
+    #+END_SRC
+
+** constructing a network
+
+   RubyBrain::Network class represents a network. The constructor accepts an array which specifies the network structure.
+   If we use 1 hidden layer which has 3 neurons for above "AND operator" example, following array indicates the structure.
+   #+BEGIN_SRC ruby
+     # 2 inputs
+     # 3 units in a hidden layer
+     # 1 output
+     [2, 3, 1]
+   #+END_SRC
+   
+   You can use 2 hidden layers with following code.
+   #+BEGIN_SRC ruby
+     # 2 inputs
+     # 4 units in 1st hidden layer
+     # 3 units in 2nd hidden layer
+     # 1 output
+     [2, 4, 2, 1]
+   #+END_SRC
+   
+   So, a netowrk is created by
+   #+BEGIN_SRC ruby
+     a_network = RubyBrain::Network.new([2, 3, 1])
+
+     # learning_rate can be set
+     a_network.learning_rate = 0.5
+
+     # the networks must be initialized before it is used
+     a_network.init_network
+   #+END_SRC
+
+   There are other options for the constructor.
+   Please refer to the code. Sorry for missing document.
+
+** training
+
+   An instance method =learn= is used for training the network.
+   You can specify not only dataset but also other options for training.
+   #+BEGIN_SRC ruby
+     # max_training_cout : max epoch
+     # tolerance : stop training if RMS error become smaller than this value.
+     a_network.learn(training_input_set, training_supervisor_set, max_training_count=100, tolerance=0.0004, monitoring_channels=[:best_params_training])
+   #+END_SRC
+
+** predicate
+
+   Use =get_forward_outputs= with input data for predicating something.
+   Input data should be 1 sample.
+   #+BEGIN_SRC ruby
+     a_network.get_forward_outputs([1, 0])
+   #+END_SRC
+
+** save weights to a file
+
+   You can save optimized weights into a file.
+   Weights are saved as YAML format.
+
+   #+BEGIN_SRC ruby
+     a_network.dump_weights_to_yaml('/path/to/saved/weights/file.yml')
+   #+END_SRC
+   
+** restore weights from a file
+
+   Optimized weights can be saved into a YAML file and you can use it for initializing weights when you create a new network.
+   #+BEGIN_SRC ruby
+     a_network = RubyBrain::Network.new([2, 3, 1])
+     a_network.init_network
+     a_network.load_weights_from_yaml_file('/path/to/saved/weights/file.yml')
+   #+END_SRC
+   
+* Examples
+
+** MNIST
+   Following code is included in [[https://github.com/%5Bmy-github-username%5D/ruby_brain/examples/mnist.rb][examples/mnist.rb]]
+
+   This module dependos on [[https://rubygems.org/gems/mnist][mnist]] gem to load mnist data into ruby array.
+
+   #+BEGIN_SRC ruby
+     require 'ruby_brain'
+     require 'ruby_brain/dataset/mnist/data'
+   #+END_SRC
+
+   Get MNIST dataset from [[http://yann.lecun.com/exdb/mnist/][THE MNIST DATABASE of handwritten digits]] if the dataset files don't exist in the working directory.
+   And load them into Ruby array =dataset=.
+
+   #+BEGIN_SRC ruby
+      dataset = RubyBrain::DataSet::Mnist::data
+   #+END_SRC
+
+   Divide =dataset= into training and test data.
+   NUM_TRAIN_DATA means how many first images are used as training data.
+   We use first 5000 images for training here.
+
+   #+BEGIN_SRC ruby
+     NUM_TRAIN_DATA = 5000
+     training_input = dataset[:input][0..(NUM_TRAIN_DATA-1)]
+     training_supervisor = dataset[:output][0..(NUM_TRAIN_DATA-1)]
+   #+END_SRC
+
+   Then construct the network and initialize.
+   In this case, an image has 784(28x28) pixcels and 10 classes(0..9).
+   So, the network structure should be [784, 50, 10] with 1 hidden layer which has 50 units.
+   You can construct the structure with following code.
+   
+   #+BEGIN_SRC ruby
+     # network structure [784, 50, 10]
+     network = RubyBrain::Network.new([dataset[:input].first.size, 50, dataset[:output].first.size])
+     # learning rate is 0.7
+     network.learning_rate = 0.7
+     # initialize network
+     network.init_network
+   #+END_SRC
+
+   Run training.
+   #+BEGIN_SRC ruby
+     network.learn(training_input, training_supervisor, max_training_count=100, tolerance=0.0004, monitoring_channels=[:best_params_training])
+   #+END_SRC
+
+   Now, An optimized network was completed.
+   You can check it.
+
+   First, add =argmax= function into Array class.
+   This method finds the index of the array position the max value exists.
+   We use this method for finding the class(label 0~9) whose probability is the highest.
+
+   #+BEGIN_SRC ruby
+     class Array
+       def argmax
+         max_i, max_val = 0, self.first
+         self.each_with_index do |v, i|
+           max_val, max_i = v, i if v > max_val
+         end
+         max_i
+       end
+     end
+   #+END_SRC
+
+   Then, you can review each classes(labels) predicated by the model with following code.
+   
+   #+BEGIN_SRC ruby
+     results = []
+     test_input.each_with_index do |input, i|
+       input.each_with_index do |e, j|
+         print(e > 0.3 ? 'x' : ' ')
+         puts if (j % 28) == 0
+       end
+       puts
+       supervisor_label = test_supervisor[i].argmax
+       predicated_label = network.get_forward_outputs(test_input[i]).argmax
+       puts "test_supervisor: #{supervisor_label}"
+       puts "predicate: #{predicated_label}"
+       results << (supervisor_label == predicated_label)
+       puts "------------------------------------------------------------"
+     end
+
+     puts "accuracy: #{results.count(true).to_f/results.size}"
+   #+END_SRC
+
+   I tried to train wioth above conditions.
+   The accuracy of trained model was 92.3%.
+   The weights file is [[https://github.com/elgoog/weights_ruby_brain/weights_782_50_10_1.yml][here]].
+   
+* Contributing
+
+  1. Fork it ( https://github.com/elgoog/ruby_brain/fork )
+  2. Create your feature branch (`git checkout -b my-new-feature`)
+  3. Commit your changes (`git commit -am 'Add some feature'`)
+  4. Push to the branch (`git push origin my-new-feature`)
+  5. Create a new Pull Request
