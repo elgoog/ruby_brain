@@ -38,7 +38,7 @@
 
 *** example "AND"
     Now we assume that we train a network to operate as "AND operator"
-    The true table of "AND operator" is as below.
+    The trueth table of "AND operator" is as below.
     In short, when both "in 1" and "in 2" are 1, the "out" should be 1
     and 0 should be output for other input combinations.
     
