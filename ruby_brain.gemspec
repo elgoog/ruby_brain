@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["elgoog"]
   spec.email         = ["elgoog.development@gmail.com"]
   spec.summary       = %q{NeuralNet/DeepLearning implement for Ruby}
-  spec.description   = %q{NeuralNet/DeepLearning implement for Ruby}
+  spec.description   = %q{Neural Net, Deep Learning implement for Ruby}
   spec.homepage      = "https://github.com/elgoog/ruby_brain/"
   spec.license       = "MIT"
 

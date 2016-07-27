@@ -49,7 +49,7 @@
     | 1    | 0    | 0   |
     | 1    | 1    | 1   |
 
-    In this situation, you can prepare the dataset lake following Ruby array.
+    In this situation, you can prepare the dataset like following Ruby array.
     #+BEGIN_SRC ruby
       training_input_set = [
         [0, 0],

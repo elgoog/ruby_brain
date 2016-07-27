@@ -4,7 +4,14 @@ module RubyBrain
     def_delegators :@weights_set, :overwrite_weights, :get_weights_as_array
 
     attr_accessor :learning_rate
-
+    
+    # Constructor of Network class
+    # 
+    # @example network structure Array(num_units_list)
+    #  [10, 30, 3]       # => 3 inputs, hidden layer 1 with 30 units, 3 outputs
+    #  [15, 50, 60, 10]  # => 15 inputs, hidden layer 1 with 50 units, hidden layer 2 with 60 units, 10 outputs
+    # 
+    # @param num_units_list [Array] Array which describes the network structure
     def initialize(num_units_list)
       @layers = []
       @num_units_list = num_units_list
@@ -20,6 +27,7 @@ module RubyBrain
     #   @weights_set.overwrite_weights(weights_set_source)
     # end
 
+    # Initialize the network. This method creates network actually based on the network structure Array which specified with Constructor.
     def init_network
       @layers = []
       layer = Layer.new
@@ -52,7 +60,9 @@ module RubyBrain
     #   @weights_set.get_weights_as_array
     # end
 
-
+    # Calculate the network output of forward propagation.
+    #
+    # @param inputs [Array] Input dataset.
     def get_forward_outputs(inputs)
       inputs.each_with_index do |input, i|
         @layers.first.nodes[i].value = input
@@ -66,7 +76,10 @@ module RubyBrain
       end
       a_layer_outputs
     end
-
+    
+    # Calculate the networkoutput of backward propagation.
+    #
+    # @param backward_inputs [Array] Input for backpropagation. Usually it is loss values.
     def run_backpropagate(backward_inputs)
       a_layer_outputs = nil
       a_layer_inputs = backward_inputs
@@ -77,6 +90,8 @@ module RubyBrain
       a_layer_outputs
     end
 
+    # Updates weights actually based on the result of backward propagation
+    #
     def update_weights
       @weights_set.each_weights_with_index do |weights, i|
         weights.each_with_index do |wl, j|
@@ -111,7 +126,14 @@ module RubyBrain
     #   end
     #   Math.sqrt(2.0 * accumulated_errors / training_inputs_set.size)
     # end
-
+    
+    # Starts training with training dataset
+    #
+    # @param inputs_set [Array<Array>] Input dataset for training. The structure is 2 dimentional Array. Eatch dimentions correspond to samples and features.
+    # @param outputs_set [Array<Array>] Output dataset for training. The structure is 2 dimentional Array. Eatch dimentions correspond to samples and features.
+    # @param max_training_count [Integer] Max training count.
+    # @param tolerance [Float] The Threshold to stop training. Training is stopped when RMS error reach to this value even if training count is not max_training_count.
+    # @param monitoring_channels [Array<Symbol>] Specify which log should be reported. Now you can select only `:best_params_training`
     def learn(inputs_set, outputs_set, max_training_count=50, tolerance=0.0, monitoring_channels=[])
       raise RubyBrain::Exception::TrainingDataError if inputs_set.size != outputs_set.size
       #      raise "inputs_set and outputs_set has different size!!!!" if inputs_set.size != outputs_set.size
@@ -240,10 +262,16 @@ module RubyBrain
       end
     end
 
+    # Dumps weights of the network into a file whose format is YAML.
+    # 
+    # @param file_name [String] The path to the YAML file in which weights are saved.
     def dump_weights_to_yaml(file_name=nil)
       @weights_set.dump_to_yaml(file_name)
     end
-
+    
+    # Loads weights of the network from existing weights file whose format is YAML.
+    # 
+    # @param yaml_file [String] The path to the YAML file which includes weights.
     def load_weights_from_yaml_file(yaml_file)
       @weights_set.load_from_yaml_file(yaml_file)
     end
