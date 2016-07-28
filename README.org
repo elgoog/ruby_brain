@@ -72,9 +72,9 @@
    If we use 1 hidden layer which has 3 neurons for above "AND operator" example, following array indicates the structure.
    #+BEGIN_SRC ruby
      # 2 inputs
-     # 3 units in a hidden layer
+     # 5 units in a hidden layer
      # 1 output
-     [2, 3, 1]
+     [2, 5, 1]
    #+END_SRC
    
    You can use 2 hidden layers with following code.
@@ -88,7 +88,7 @@
    
    So, a netowrk is created by
    #+BEGIN_SRC ruby
-     a_network = RubyBrain::Network.new([2, 3, 1])
+     a_network = RubyBrain::Network.new([2, 5, 1])
 
      # learning_rate can be set
      a_network.learning_rate = 0.5
@@ -98,7 +98,7 @@
    #+END_SRC
 
    There are other options for the constructor.
-   Please refer to the code. Sorry for missing document.
+   Please refer to [[http://www.rubydoc.info/github/elgoog/ruby_brain/master/RubyBrain%252FNetwork%253Alearn][Network#learn document]]
 
 ** training
 
@@ -107,7 +107,7 @@
    #+BEGIN_SRC ruby
      # max_training_cout : max epoch
      # tolerance : stop training if RMS error become smaller than this value.
-     a_network.learn(training_input_set, training_supervisor_set, max_training_count=100, tolerance=0.0004, monitoring_channels=[:best_params_training])
+     a_network.learn(training_input_set, training_supervisor_set, max_training_count=3000, tolerance=0.0004, monitoring_channels=[:best_params_training])
    #+END_SRC
 
 ** predicate
@@ -131,7 +131,7 @@
 
    Optimized weights can be saved into a YAML file and you can use it for initializing weights when you create a new network.
    #+BEGIN_SRC ruby
-     a_network = RubyBrain::Network.new([2, 3, 1])
+     a_network = RubyBrain::Network.new([2, 5, 1])
      a_network.init_network
      a_network.load_weights_from_yaml_file('/path/to/saved/weights/file.yml')
    #+END_SRC
@@ -149,10 +149,21 @@
    #+END_SRC
 
    Get MNIST dataset from [[http://yann.lecun.com/exdb/mnist/][THE MNIST DATABASE of handwritten digits]] if the dataset files don't exist in the working directory.
-   And load them into Ruby array =dataset=.
+   And load them into Ruby dictionary =dataset=.
 
    #+BEGIN_SRC ruby
       dataset = RubyBrain::DataSet::Mnist::data
+
+      # dataset has :input and :output dataset
+      dataset.keys # => [:input, :output]
+
+      # :input dataset has 60000(samples) x 784(28 * 28 input pixcels)
+      dataset[:input].size       # => 60000
+      dataset[:input].first.size # => 784
+
+      # :output dataset has 60000(samples) x 10(classes 0~9)
+      dataset[:output].size       # => 60000
+      dataset[:output].first.size # => 10
    #+END_SRC
 
    Divide =dataset= into training and test data.

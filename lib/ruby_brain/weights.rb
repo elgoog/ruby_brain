@@ -60,7 +60,7 @@ module RubyBrain
           YAML.dump(@w_3d, f)
         end
       end
-      # @w_3d.to_yaml
+      # # @w_3d.to_yaml
     end
 
     def load_from_yaml_file(yaml_file)
