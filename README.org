@@ -8,6 +8,11 @@
   So, you can treat neurons flexibly in a network.
   Instead, the speed is very slow and it might not be reasonable for applications to use this library in the core.
   However this library may help you get more deep knowledge around neuralnet/deep learning.
+
+  *caution*
+  Currently RubyBrain has shigmoid as the activation function.
+  So, output layer also can has only sigmoid. 
+  In the result, the network can only treat 0~1 outpus.
   
 * Installation
 
