@@ -158,27 +158,43 @@
 
    #+BEGIN_SRC ruby
       dataset = RubyBrain::DataSet::Mnist::data
+      training_dataset = dataset.first
+      test_dataset = dataset.last
 
       # dataset has :input and :output dataset
-      dataset.keys # => [:input, :output]
+      training_dataset.keys # => [:input, :output]
+      test_dataset.keys # => [:input, :output]
 
-      # :input dataset has 60000(samples) x 784(28 * 28 input pixcels)
-      dataset[:input].size       # => 60000
-      dataset[:input].first.size # => 784
+      # :input of training_dataset has 60000(samples) x 784(28 * 28 input pixcels)
+      training_dataset[:input].size       # => 60000
+      training_dataset[:input].first.size # => 784
 
-      # :output dataset has 60000(samples) x 10(classes 0~9)
-      dataset[:output].size       # => 60000
-      dataset[:output].first.size # => 10
+      # :output of training_dataset has 60000(samples) x 10(classes 0~9)
+      training_dataset[:output].size       # => 60000
+      training_dataset[:output].first.size # => 10
+
+      # :input of test_dataset has 10000(samples) x 784(28 * 28 input pixcels)
+      test_dataset[:input].size       # => 10000
+      test_dataset[:input].first.size # => 784
+
+      # :output of test_dataset has 10000(samples) x 10(classes 0~9)
+      test_dataset[:output].size       # => 10000
+      test_dataset[:output].first.size # => 10
    #+END_SRC
 
-   Divide =dataset= into training and test data.
+   In this example, We use only first 5000 samples of training_dataset
+   because RubyBrain is slow and it takes very long time to learn full training_dataset.
    NUM_TRAIN_DATA means how many first images are used as training data.
-   We use first 5000 images for training here.
+   Here it is set as 5000.
 
    #+BEGIN_SRC ruby
+     # use only first 5000 samples for training
      NUM_TRAIN_DATA = 5000
      training_input = dataset[:input][0..(NUM_TRAIN_DATA-1)]
      training_supervisor = dataset[:output][0..(NUM_TRAIN_DATA-1)]
+     # use full test dataset
+     test_input = test_dataset[:input]
+     test_supervisor = test_dataset[:output]
    #+END_SRC
 
    Then construct the network and initialize.
@@ -240,8 +256,8 @@
      puts "accuracy: #{results.count(true).to_f/results.size}"
    #+END_SRC
 
-   I tried to train wioth above conditions.
-   The accuracy of trained model was 92.3%.
+   I tried to train with above conditions.
+   The accuracy of trained model was 93.12%.
    The weights file is [[https://github.com/elgoog/weights_ruby_brain/blob/master/weights_782_50_10_1.yml][here]].
    
 * Contributing

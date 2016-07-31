@@ -1,21 +1,39 @@
 require 'ruby_brain'
 require 'ruby_brain/dataset/mnist/data'
 
-# NUM_TEST_DATA = 50000
+NUM_TRAIN_DATA = 5000
 
 dataset = RubyBrain::DataSet::Mnist::data
 
-NUM_TRAIN_DATA = 5000
+training_dataset = dataset.first
+test_dataset = dataset.last
 
-training_input = dataset[:input][0..(NUM_TRAIN_DATA-1)]
-training_supervisor = dataset[:output][0..(NUM_TRAIN_DATA-1)]
+puts "[training data info]"
+puts " [in]"
+puts "#{training_dataset[:input].size} samples (use first #{NUM_TRAIN_DATA} for training)"
+puts "#{training_dataset[:input].first.size} features"
+puts " [out]"
+puts "#{training_dataset[:output].size} samples"
+puts "#{training_dataset[:output].first.size} features"
 
-# test_input = dataset[:input][NUM_TRAIN_DATA..(NUM_TRAIN_DATA+NUM_TEST_DATA-1)]
-# test_supervisor = dataset[:output][NUM_TRAIN_DATA..(NUM_TRAIN_DATA+NUM_TEST_DATA-1)]
-test_input = dataset[:input][NUM_TRAIN_DATA..-1]
-test_supervisor = dataset[:output][NUM_TRAIN_DATA..-1]
+puts "[test data info]"
+puts " [in]"
+puts "#{test_dataset[:input].size} samples"
+puts "#{test_dataset[:input].first.size} features"
+puts " [out]"
+puts "#{test_dataset[:output].size} samples"
+puts "#{test_dataset[:output].first.size} features"
 
-network = RubyBrain::Network.new([dataset[:input].first.size, 50, dataset[:output].first.size])
+# training_input = training_dataset[:input]
+# training_supervisor = training_dataset[:output]
+
+training_input = training_dataset[:input][0..(NUM_TRAIN_DATA-1)]
+training_supervisor = training_dataset[:output][0..(NUM_TRAIN_DATA-1)]
+
+test_input = test_dataset[:input]
+test_supervisor = test_dataset[:output]
+
+network = RubyBrain::Network.new([training_dataset[:input].first.size, 50, training_dataset[:output].first.size])
 network.learning_rate = 0.7
 network.init_network
 ### You can load weights from file in this timing if you want.
@@ -28,6 +46,7 @@ network.learn(training_input, training_supervisor, max_training_count=100, toler
 
 ### You can save weights into a yml file if you want.
 # network.dump_weights_to_yaml('path/to/weights.yml.file')
+network.dump_weights_to_yaml('./weights_xxx.yml')
 
 
 class Array
@@ -71,7 +90,7 @@ puts "accuracy: #{results.count(true).to_f/results.size}"
 #   monitoring_channels: [:best_params_training]
 # }
 
-# RubyBrain::Trainer.normal_learning([dataset[:input].first.size, 50, dataset[:output].first.size],
+# RubyBrain::Trainer.normal_learning([training_dataset[:input].first.size, 50, training_dataset[:output].first.size],
 #                                    training_input, training_supervisor,
 #                                    training_option)
 
