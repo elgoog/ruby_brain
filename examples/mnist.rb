@@ -33,7 +33,7 @@ training_supervisor = training_dataset[:output][0..(NUM_TRAIN_DATA-1)]
 test_input = test_dataset[:input]
 test_supervisor = test_dataset[:output]
 
-network = RubyBrain::Network.new([training_dataset[:input].first.size, 50, training_dataset[:output].first.size])
+network = RubyBrain::Network.new([training_input.first.size, 50, training_supervisor.first.size])
 network.learning_rate = 0.7
 network.init_network
 ### You can load weights from file in this timing if you want.

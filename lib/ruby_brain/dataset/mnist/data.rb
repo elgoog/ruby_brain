@@ -37,7 +37,6 @@ module RubyBrain::DataSet::Mnist
       download_file('http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz', test_labels_path) 
     end
 
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     train_images = Mnist.load_images(train_images_path)
     train_labels = Mnist.load_labels(train_labels_path)
     test_images = Mnist.load_images(test_images_path)

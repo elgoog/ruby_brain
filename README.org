@@ -190,8 +190,8 @@
    #+BEGIN_SRC ruby
      # use only first 5000 samples for training
      NUM_TRAIN_DATA = 5000
-     training_input = dataset[:input][0..(NUM_TRAIN_DATA-1)]
-     training_supervisor = dataset[:output][0..(NUM_TRAIN_DATA-1)]
+     training_input = training_dataset[:input][0..(NUM_TRAIN_DATA-1)]
+     training_supervisor = training_dataset[:output][0..(NUM_TRAIN_DATA-1)]
      # use full test dataset
      test_input = test_dataset[:input]
      test_supervisor = test_dataset[:output]
@@ -204,7 +204,7 @@
    
    #+BEGIN_SRC ruby
      # network structure [784, 50, 10]
-     network = RubyBrain::Network.new([dataset[:input].first.size, 50, dataset[:output].first.size])
+     network = RubyBrain::Network.new([training_input.first.size, 50, training_supervisor.first.size])
      # learning rate is 0.7
      network.learning_rate = 0.7
      # initialize network
@@ -236,6 +236,7 @@
    #+END_SRC
 
    Then, you can review each classes(labels) predicated by the model with following code.
+   This code show each picture as an ascii art and list the answer(test_output) and predicated label.
    
    #+BEGIN_SRC ruby
      results = []
@@ -246,7 +247,7 @@
        end
        puts
        supervisor_label = test_supervisor[i].argmax
-       predicated_label = network.get_forward_outputs(test_input[i]).argmax
+       predicated_label = network.get_forward_outputs(input).argmax
        puts "test_supervisor: #{supervisor_label}"
        puts "predicate: #{predicated_label}"
        results << (supervisor_label == predicated_label)
