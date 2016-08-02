@@ -258,7 +258,7 @@
    #+END_SRC
 
    I tried to train with above conditions.
-   The accuracy of trained model was 93.12%.
+   And after some trial runs, the accuracy of trained model was 93.12%.
    The weights file is [[https://github.com/elgoog/weights_ruby_brain/blob/master/weights_782_50_10_1.yml][here]].
    
 * Contributing
