@@ -16,19 +16,7 @@
   
 * Installation
 
-  Add this line to your application's Gemfile:
-
-  #+BEGIN_SRC ruby
-    gem 'ruby_brain'
-  #+END_SRC
-
-  And then execute:
-
-  #+BEGIN_SRC shell
-    $ bundle
-  #+END_SRC
-
-  Or install it yourself as:
+  You can install simply
 
   #+BEGIN_SRC shell
     $ gem install ruby_brain
@@ -143,7 +131,19 @@
    
 * Examples
 
+** Imitation a wave_form
+   Currently this example is prepared only in iRuby notebook.
+   You can see it in the following link.
+   
+   [[http://nbviewer.jupyter.org/github/elgoog/ruby_brain/blob/master/examples/wave_form.ipynb][example/wave_form.ipynb - iRuby]]
+
 ** MNIST
+
+   You can see following contents in iRuby notebook.
+
+   [[http://nbviewer.jupyter.org/github/elgoog/ruby_brain/blob/master/examples/mnist.ipynb][example/mnist.ipynb - iRuby]]
+
+   
    Following code is included in [[https://github.com/elgoog/ruby_brain/blob/master/examples/mnist.rb][examples/mnist.rb]]
 
    This module dependos on [[https://rubygems.org/gems/mnist][mnist]] gem to load mnist data into ruby array.

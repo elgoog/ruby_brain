@@ -11,17 +11,7 @@ However this library may help you get more deep knowledge around neuralnet/deep 
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'ruby_brain'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+You can install simply
 
     $ gem install ruby_brain
 
