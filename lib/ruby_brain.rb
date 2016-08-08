@@ -1,5 +1,4 @@
 require "ruby_brain/version"
-require 'forwardable'
 require 'yaml'
 require 'pp'
 

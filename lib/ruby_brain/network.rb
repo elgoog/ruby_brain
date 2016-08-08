@@ -1,8 +1,5 @@
 module RubyBrain
   class Network
-    extend Forwardable
-    def_delegators :@weights_set, :overwrite_weights, :get_weights_as_array
-
     attr_accessor :learning_rate
     
     # Constructor of Network class
