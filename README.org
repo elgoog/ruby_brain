@@ -78,8 +78,8 @@
      # 1 output
      [2, 4, 2, 1]
    #+END_SRC
-   
-   So, a netowrk is created by
+
+   So, a network is created by
    #+BEGIN_SRC ruby
      a_network = RubyBrain::Network.new([2, 5, 1])
 
