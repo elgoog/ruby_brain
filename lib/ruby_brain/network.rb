@@ -135,7 +135,7 @@ module RubyBrain
       raise RubyBrain::Exception::TrainingDataError if inputs_set.size != outputs_set.size
       #      raise "inputs_set and outputs_set has different size!!!!" if inputs_set.size != outputs_set.size
 
-      best_error = 9999999999999
+      best_error = Float::INFINITY
       best_weights_array = []
       max_training_count.times do |i_training|
         accumulated_errors = 0.0 # for rms
